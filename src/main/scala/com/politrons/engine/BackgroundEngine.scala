@@ -1,13 +1,13 @@
-package com.politrons.level
+package com.politrons.engine
 
 import java.awt.event.{ActionEvent, ActionListener}
-import javax.swing._
 import java.awt.{Font, Graphics}
+import javax.swing._
 
 /**
  * We set the background, and we set the JLabel of the [CharacterEngine]
  */
-class Background() extends JLabel  with ActionListener {
+class BackgroundEngine() extends JLabel  with ActionListener {
 
   var playedTime=0
 

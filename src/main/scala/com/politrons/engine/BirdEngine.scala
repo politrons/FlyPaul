@@ -7,10 +7,10 @@ import java.util.concurrent.Executors
 import javax.swing._
 import scala.concurrent.{ExecutionContext, Future}
 
-
-class BirdEngine(var xPos: Integer,
+class BirdEngine(val backgroundEngine: BackgroundEngine,
+                 var xPos: Integer,
                  var yPos: Integer,
-                 var heartDisable: Boolean = false) extends JLabel with ActionListener {
+                 var cloudEngines: List[CloudEngine]) extends JLabel with ActionListener {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
@@ -71,10 +71,37 @@ class BirdEngine(var xPos: Integer,
    */
   private def outOfLevelSchedule() = {
     Future {
-      while (bird.y >= -50 && bird.y <= 600) {
+      while (true) {
         Thread.sleep(100)
+        if(bird.y <= -50 || bird.y >= 600){
+          println("##### Game Over ######")
+          resetGame()
+          birdDeadAnimation()
+        }
       }
-      println("######### Game over!!! #############")
+    }
+  }
+
+  private def resetGame(): Unit = {
+    cloudEngines.foreach(cloudEngine => {
+      cloudEngine.cloudSpeed = 3
+    })
+    backgroundEngine.playedTime = 0
+  }
+
+  /**
+   * Move character to the initial position and make an effect of reset
+   */
+  def birdDeadAnimation(): Unit = {
+    Future{
+      bird.x=xPos
+      bird.y=yPos
+      0 to 50 foreach { _ =>
+        setIcon(null)
+        Thread.sleep(10)
+        setIcon(bird.imageIcon)
+        Thread.sleep(10)
+      }
     }
   }
 
