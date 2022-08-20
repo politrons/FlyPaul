@@ -1,6 +1,6 @@
 package com.politrons.level
 
-import com.politrons.engine.{BirdEngine, BlockEngine}
+import com.politrons.engine.{BirdEngine, CloudEngine}
 
 import java.util.concurrent.Executors
 import javax.swing.{JFrame, SwingUtilities}
@@ -12,9 +12,10 @@ class Level extends JFrame {
 
   private val birdEngine = new BirdEngine(250, 250)
 
-  private val blockEngine1 = new BlockEngine(500, 50)
-  private val blockEngine2 = new BlockEngine(700, 100)
-  private val blockEngine3 = new BlockEngine(900, 150)
+  private val blockEngine1 = new CloudEngine(900, 0)
+  private val blockEngine2 = new CloudEngine(500, 150)
+  private val blockEngine3 = new CloudEngine(700, 300)
+  private val blockEngine4 = new CloudEngine(900, 500)
 
   initGame()
 
@@ -23,6 +24,7 @@ class Level extends JFrame {
     this.add(blockEngine1)
     this.add(blockEngine2)
     this.add(blockEngine3)
+    this.add(blockEngine4)
     this.add(new Background)
     this.setResizable(false)
     this.pack()

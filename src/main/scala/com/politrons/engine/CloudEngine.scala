@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.sprite.Block
+import com.politrons.sprite.Cloud
 
 import java.awt.Color
 import java.awt.event.{ActionEvent, ActionListener}
@@ -10,20 +10,20 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Random
 
 
-class BlockEngine(var xPos: Integer,
+class CloudEngine(var xPos: Integer,
                   var yPos: Integer,
                   var heartDisable: Boolean = false) extends JLabel with ActionListener {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
-  val block = new Block(xPos, yPos)
+  val cloud = new Cloud(xPos, yPos)
 
   init()
 
   private def init(): Unit = {
-    setIcon(block.imageIcon)
+    setIcon(cloud.imageIcon)
     setSize(this.getPreferredSize)
-    setLocation(block.x, block.y)
+    setLocation(cloud.x, cloud.y)
     startHorizon()
     setFrameDelay()
   }
@@ -37,19 +37,18 @@ class BlockEngine(var xPos: Integer,
   def startHorizon(): Unit = {
     Future {
       while (true) {
-        if (block.x <= 0) {
-          block.x = xPos
-          block.y = Random.between(yPos - 50, yPos)
+        if (cloud.x <= -150) {
+          cloud.x = 800
+          cloud.y = Random.between(0,500)
         } else {
-          block.x -= 5
+          cloud.x -= 5
         }
-        Thread.sleep(100)
-        println(s"Block X:${block.x} Y:${block.y}")
+        Thread.sleep(50)
       }
     }
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {
-    setLocation(block.x, block.y)
+    setLocation(cloud.x, cloud.y)
   }
 }

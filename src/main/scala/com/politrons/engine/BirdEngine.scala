@@ -55,6 +55,8 @@ class BirdEngine(var xPos: Integer,
       while (true) {
         bird.y += 10
         Thread.sleep(100)
+        println(s"Bird X:${bird.x} Y:${bird.y}")
+
       }
     }
   }
