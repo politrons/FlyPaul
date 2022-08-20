@@ -27,6 +27,7 @@ class BirdEngine(val backgroundEngine: BackgroundEngine,
     setFrameDelay()
     startGravity()
     outOfLevelSchedule()
+    mapCollisionSchedule()
   }
 
   private def setFrameDelay(): Unit = {
@@ -72,12 +73,30 @@ class BirdEngine(val backgroundEngine: BackgroundEngine,
   private def outOfLevelSchedule() = {
     Future {
       while (true) {
-        Thread.sleep(100)
-        if(bird.y <= -50 || bird.y >= 600){
+        Thread.sleep(10)
+        if (bird.y <= -50 || bird.y >= 600) {
           println("##### Game Over ######")
           resetGame()
           birdDeadAnimation()
         }
+      }
+    }
+  }
+
+  private def mapCollisionSchedule() = {
+    Future {
+      val deviation = 20
+      while (true) {
+        Thread.sleep(1)
+        cloudEngines.foreach(cloudEngine => {
+          val xComp = Math.abs(bird.x - (cloudEngine.cloud.x + 100))
+          val yComp = Math.abs(bird.y - (cloudEngine.cloud.y + 50))
+          if (xComp <= deviation && yComp <= deviation) {
+            println("##### Game Over ######")
+            resetGame()
+            birdDeadAnimation()
+          }
+        })
       }
     }
   }
@@ -93,9 +112,9 @@ class BirdEngine(val backgroundEngine: BackgroundEngine,
    * Move character to the initial position and make an effect of reset
    */
   def birdDeadAnimation(): Unit = {
-    Future{
-      bird.x=xPos
-      bird.y=yPos
+    Future {
+      bird.x = xPos
+      bird.y = yPos
       0 to 50 foreach { _ =>
         setIcon(null)
         Thread.sleep(10)
