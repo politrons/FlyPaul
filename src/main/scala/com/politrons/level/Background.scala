@@ -30,6 +30,5 @@ class Background() extends JLabel  with ActionListener {
     super.paintComponent(g)
     g.setFont(new Font("Verdana", Font.CENTER_BASELINE, 18));
     g.drawString(s"TIME:$playedTime ", 20, 20)
-
   }
 }

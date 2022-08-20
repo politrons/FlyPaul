@@ -2,7 +2,6 @@ package com.politrons.engine
 
 import com.politrons.sprite.Cloud
 
-import java.awt.Color
 import java.awt.event.{ActionEvent, ActionListener}
 import java.util.concurrent.Executors
 import javax.swing._
@@ -17,6 +16,7 @@ class CloudEngine(var xPos: Integer,
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
   val cloud = new Cloud(xPos, yPos)
+  var cloudSpeed = 3
 
   init()
 
@@ -35,15 +35,21 @@ class CloudEngine(var xPos: Integer,
   }
 
   def startHorizon(): Unit = {
+    val incrementalTime = 10000
+    var time = System.currentTimeMillis() + incrementalTime
     Future {
       while (true) {
+        if (time < System.currentTimeMillis()) {
+          cloudSpeed += 1
+          time = System.currentTimeMillis() + incrementalTime
+        }
         if (cloud.x <= -150) {
           cloud.x = 800
-          cloud.y = Random.between(0,500)
+          cloud.y = Random.between(0, 500)
         } else {
-          cloud.x -= 5
+          cloud.x -= cloudSpeed
         }
-        Thread.sleep(50)
+        Thread.sleep(20)
       }
     }
   }
@@ -58,27 +64,27 @@ class CloudEngine(var xPos: Integer,
    * the character like dead.
    * In case we lose all hearts the game is over.
    */
-//  private def collisionEngine() = {
-//    Future {
-//      val deviation = 10
-//      while (true) {
-//        val charX = bird.x
-//        val charY = bird.y
-//        val xComp = Math.abs(charX - enemy1.x)
-//        val yComp = Math.abs(charY - enemy1.y)
-//        if (xComp <= deviation && yComp <= deviation) {
-//          characterEngine.live match {
-//            case 3 => heart3Engine.removeHeart()
-//            case 2 => heart2Engine.removeHeart()
-//            case 1 => heart1Engine.removeHeart(); gameOverEngine.setVisible(true)
-//          }
-//          characterEngine.live -= 1
-//          characterEngine.characterDeadAnimation()
-//        }
-//        Thread.sleep(100)
-//      }
-//    }
-//  }
+  //  private def collisionEngine() = {
+  //    Future {
+  //      val deviation = 10
+  //      while (true) {
+  //        val charX = bird.x
+  //        val charY = bird.y
+  //        val xComp = Math.abs(charX - enemy1.x)
+  //        val yComp = Math.abs(charY - enemy1.y)
+  //        if (xComp <= deviation && yComp <= deviation) {
+  //          characterEngine.live match {
+  //            case 3 => heart3Engine.removeHeart()
+  //            case 2 => heart2Engine.removeHeart()
+  //            case 1 => heart1Engine.removeHeart(); gameOverEngine.setVisible(true)
+  //          }
+  //          characterEngine.live -= 1
+  //          characterEngine.characterDeadAnimation()
+  //        }
+  //        Thread.sleep(100)
+  //      }
+  //    }
+  //  }
 
 
 }
