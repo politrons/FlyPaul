@@ -7,10 +7,11 @@ import java.util.concurrent.Executors
 import javax.swing._
 import scala.concurrent.{ExecutionContext, Future}
 
-class BirdEngine(val backgroundEngine: BackgroundEngine,
-                 var xPos: Integer,
+class BirdEngine(var xPos: Integer,
                  var yPos: Integer,
-                 var cloudEngines: List[CloudEngine]) extends JLabel with ActionListener {
+                 var cloudEngines: List[CloudEngine],
+                 var hears: List[HeartEngine],
+                 var live:Int=3) extends JLabel with ActionListener {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
@@ -75,9 +76,7 @@ class BirdEngine(val backgroundEngine: BackgroundEngine,
       while (true) {
         Thread.sleep(10)
         if (bird.y <= -50 || bird.y >= 600) {
-          println("##### Game Over ######")
-          resetGame()
-          birdDeadAnimation()
+          processDeadBird()
         }
       }
     }
@@ -92,27 +91,31 @@ class BirdEngine(val backgroundEngine: BackgroundEngine,
           val xComp = Math.abs(bird.x - (cloudEngine.cloud.x + 100))
           val yComp = Math.abs(bird.y - (cloudEngine.cloud.y + 50))
           if (xComp <= deviation && yComp <= deviation) {
-            println("##### Game Over ######")
-            resetGame()
-            birdDeadAnimation()
+            processDeadBird()
           }
         })
       }
     }
   }
 
+  private def processDeadBird(): Unit = {
+    println("##### Game Over ######")
+    live-=1
+    hears(live).removeHeart()
+    resetGame()
+    birdDeadAnimation()
+  }
+
   private def resetGame(): Unit = {
     cloudEngines.foreach(cloudEngine => {
       cloudEngine.cloudSpeed = 3
     })
-    backgroundEngine.playedTime = 0
   }
 
   /**
    * Move character to the initial position and make an effect of reset
    */
   def birdDeadAnimation(): Unit = {
-    Future {
       bird.x = xPos
       bird.y = yPos
       0 to 50 foreach { _ =>
@@ -121,7 +124,6 @@ class BirdEngine(val backgroundEngine: BackgroundEngine,
         setIcon(bird.imageIcon)
         Thread.sleep(10)
       }
-    }
   }
 
 
