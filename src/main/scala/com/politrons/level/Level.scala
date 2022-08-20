@@ -34,5 +34,4 @@ class Level extends JFrame {
     setResizable(false)
     setDefaultCloseOperation(3)
   }
-
 }
