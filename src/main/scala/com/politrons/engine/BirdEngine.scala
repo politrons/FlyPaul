@@ -99,7 +99,6 @@ class BirdEngine(var xPos: Integer,
   }
 
   private def processDeadBird(): Unit = {
-    println("##### Game Over ######")
     live-=1
     hears(live).removeHeart()
     resetGame()

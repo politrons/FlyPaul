@@ -17,7 +17,6 @@ class HeartEngine(var xPos: Integer,
   init()
 
   private def init(): Unit = {
-//    setFocusable(true)
     setIcon(heart.imageIcon)
     setSize(this.getPreferredSize)
     setLocation(heart.x, heart.y)
