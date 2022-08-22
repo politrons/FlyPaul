@@ -58,33 +58,4 @@ class CloudEngine(var xPos: Integer,
     setLocation(cloud.x, cloud.y)
   }
 
-  /**
-   * Function to check if the character collision with an enemy.
-   * In case of collision we reduce one heart in the level, and we set
-   * the character like dead.
-   * In case we lose all hearts the game is over.
-   */
-  //  private def collisionEngine() = {
-  //    Future {
-  //      val deviation = 10
-  //      while (true) {
-  //        val charX = bird.x
-  //        val charY = bird.y
-  //        val xComp = Math.abs(charX - enemy1.x)
-  //        val yComp = Math.abs(charY - enemy1.y)
-  //        if (xComp <= deviation && yComp <= deviation) {
-  //          characterEngine.live match {
-  //            case 3 => heart3Engine.removeHeart()
-  //            case 2 => heart2Engine.removeHeart()
-  //            case 1 => heart1Engine.removeHeart(); gameOverEngine.setVisible(true)
-  //          }
-  //          characterEngine.live -= 1
-  //          characterEngine.characterDeadAnimation()
-  //        }
-  //        Thread.sleep(100)
-  //      }
-  //    }
-  //  }
-
-
 }
