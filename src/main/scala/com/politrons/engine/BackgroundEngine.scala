@@ -1,12 +1,10 @@
 package com.politrons.engine
 
-import java.awt.Graphics
-import java.awt.event.{ActionEvent, ActionListener}
-import javax.swing._
 import java.awt.event.{ActionEvent, ActionListener}
 import java.awt.{Font, Graphics}
+import javax.swing._
 
-class BackgroundEngine(goalEngine: GoalEngine) extends JLabel with ActionListener {
+class BackgroundEngine(implicit  goalEngine: GoalEngine) extends JLabel with ActionListener {
 
   var playedTimeInMin = 1
 

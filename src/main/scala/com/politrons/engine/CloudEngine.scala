@@ -37,18 +37,13 @@ class CloudEngine(var xPos: Integer,
   def startHorizon(): Unit = {
     val incrementalTime = 10000
     var time = System.currentTimeMillis() + incrementalTime
+
     Future {
       while (true) {
         if (time < System.currentTimeMillis()) {
-          cloudSpeed += 1
-          time = System.currentTimeMillis() + incrementalTime
+          time = increaseSpeed(incrementalTime)
         }
-        if (cloud.x <= -150) {
-          cloud.x = 800
-          cloud.y = Random.between(0, 500)
-        } else {
-          cloud.x -= cloudSpeed
-        }
+        moveClouds()
         Thread.sleep(20)
       }
     }
@@ -56,6 +51,20 @@ class CloudEngine(var xPos: Integer,
 
   override def actionPerformed(e: ActionEvent): Unit = {
     setLocation(cloud.x, cloud.y)
+  }
+
+  def moveClouds(): Unit = {
+    if (cloud.x <= -150) {
+      cloud.x = 800
+      cloud.y = Random.between(0, 500)
+    } else {
+      cloud.x -= cloudSpeed
+    }
+  }
+
+  private val increaseSpeed: Int => Long = incrementalTime => {
+    cloudSpeed += 1
+    System.currentTimeMillis() + incrementalTime
   }
 
 }

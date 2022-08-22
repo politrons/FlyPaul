@@ -17,8 +17,8 @@ class Level extends JFrame {
   private val cloudEngine2 = new CloudEngine(500, 150)
   private val cloudEngine3 = new CloudEngine(700, 300)
   private val cloudEngine4 = new CloudEngine(900, 500)
-  private val goalEngine = new GoalEngine(550, 200)
-  private val backgroundEngine: BackgroundEngine = new BackgroundEngine(goalEngine)
+  implicit private val goalEngine: GoalEngine = new GoalEngine(550, 200)
+  private val backgroundEngine: BackgroundEngine = new BackgroundEngine()
   private val birdEngine = new BirdEngine(
     250,
     250,
