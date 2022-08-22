@@ -11,16 +11,21 @@ class BirdEngine(var xPos: Integer,
                  var yPos: Integer,
                  var cloudEngines: List[CloudEngine],
                  var hears: List[HeartEngine],
-                 var live:Int=3) extends JLabel with ActionListener {
+                 val powerUpEngine: PowerUpEngine,
+                 var live: Int = 3
+                ) extends JLabel with ActionListener {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
   val bird = new Bird(xPos, yPos)
 
+  private val regularKeyListener = new KeyListener()
+  private val superBootsKeyListener = new SuperBootsKeyListener()
+
   init()
 
   private def init(): Unit = {
-    addKeyListener(new KeyListener)
+    addKeyListener(regularKeyListener)
     setFocusable(true)
     setIcon(bird.imageIcon)
     setSize(this.getPreferredSize)
@@ -29,6 +34,7 @@ class BirdEngine(var xPos: Integer,
     startGravity()
     outOfLevelSchedule()
     mapCollisionSchedule()
+    powerUpSchedule()
   }
 
   private def setFrameDelay(): Unit = {
@@ -51,6 +57,22 @@ class BirdEngine(var xPos: Integer,
           bird.y -= 35
         case _ =>
           println("Key not implemented")
+      }
+    }
+  }
+
+  private class SuperBootsKeyListener() extends KeyAdapter {
+
+    override def keyPressed(e: KeyEvent): Unit = {
+      e.getKeyCode match {
+        case KeyEvent.VK_UP =>
+          bird.changeFrame()
+          bird.y -= 50
+        case KeyEvent.VK_DOWN =>
+          bird.changeFrame()
+          bird.y += 50
+        case _ =>
+          println("Super Key not implemented")
       }
     }
   }
@@ -98,8 +120,28 @@ class BirdEngine(var xPos: Integer,
     }
   }
 
+   private def powerUpSchedule(): Future[Unit] = {
+    Future {
+      val deviation = 20
+      while (true) {
+        val xComp = Math.abs(bird.x - powerUpEngine.powerUp.x)
+        val yComp = Math.abs(bird.y - powerUpEngine.powerUp.y)
+        println("####### xComp " + xComp + " yComp " + yComp + " ##########")
+        if (xComp <= deviation && yComp <= deviation) {
+          println("####### Power Up loaded ##########")
+          processDeadBird()
+          removeKeyListener(regularKeyListener)
+          addKeyListener(superBootsKeyListener)
+          Thread.sleep(30000)
+          removeKeyListener(superBootsKeyListener)
+          addKeyListener(regularKeyListener)
+        }
+      }
+    }
+  }
+
   private def processDeadBird(): Unit = {
-    live-=1
+    live -= 1
     hears(live).removeHeart()
     resetGame()
     birdDeadAnimation()
@@ -115,14 +157,14 @@ class BirdEngine(var xPos: Integer,
    * Move character to the initial position and make an effect of reset
    */
   def birdDeadAnimation(): Unit = {
-      bird.x = xPos
-      bird.y = yPos
-      0 to 50 foreach { _ =>
-        setIcon(null)
-        Thread.sleep(10)
-        setIcon(bird.imageIcon)
-        Thread.sleep(10)
-      }
+    bird.x = xPos
+    bird.y = yPos
+    0 to 50 foreach { _ =>
+      setIcon(null)
+      Thread.sleep(10)
+      setIcon(bird.imageIcon)
+      Thread.sleep(10)
+    }
   }
 
 
