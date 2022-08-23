@@ -1,5 +1,7 @@
 # FlyPaul
 
+Is this repo useful? Please ⭑Star this repository and share the love.
+
 It's a simple 2D Game base on ```Javax.Swing``` implemented in [Scala](https://www.scala-lang.org).
 
 The goal in the game is dodge the ```clouds``` that are getting faster during 5 minutes.
