@@ -36,7 +36,7 @@ class PowerUpEngine(var xPos: Integer,
    */
   override def actionPerformed(e: ActionEvent): Unit = {
     val i = random.nextInt(100)
-    if (i < 30) {
+    if (i < 99) {
       setVisible(true)
       movePowerUp()
     }
