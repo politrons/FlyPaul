@@ -126,13 +126,13 @@ class BirdEngine(var xPos: Integer,
       while (true) {
         val xComp = Math.abs(bird.x - powerUpEngine.powerUp.x)
         val yComp = Math.abs(bird.y - powerUpEngine.powerUp.y)
-        println("####### xComp " + xComp + " yComp " + yComp + " ##########")
         if (xComp <= deviation && yComp <= deviation) {
-          println("####### Power Up loaded ##########")
-          processDeadBird()
+          println("Power Up loaded")
+          bird.birdImagesMap = bird.superBirdImages
           removeKeyListener(regularKeyListener)
           addKeyListener(superBootsKeyListener)
           Thread.sleep(30000)
+          bird.birdImagesMap = bird.birdImages
           removeKeyListener(superBootsKeyListener)
           addKeyListener(regularKeyListener)
         }

@@ -35,12 +35,11 @@ class PowerUpEngine(var xPos: Integer,
    * @param e
    */
   override def actionPerformed(e: ActionEvent): Unit = {
-//    val i = random.nextInt(100)
-//    if (i < 30) {
-      println("############ POWER UP ###############")
+    val i = random.nextInt(100)
+    if (i < 30) {
       setVisible(true)
       movePowerUp()
-//    }
+    }
   }
 
   /**

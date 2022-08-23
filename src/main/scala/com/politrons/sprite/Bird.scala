@@ -8,17 +8,25 @@ class Bird(var x:Integer, var y:Integer) {
 
   private var frame=1
 
-  val images = Map(
+
+  val birdImages = Map(
      1 -> new ImageIcon(scaleImage(new ImageIcon("src/main/resources/bird1.png").getImage, 50,50)),
      2 -> new ImageIcon(scaleImage(new ImageIcon("src/main/resources/bird2.png").getImage, 50,50))
   )
-  var imageIcon:ImageIcon = images(1)
 
+  val superBirdImages = Map(
+    1 -> new ImageIcon(scaleImage(new ImageIcon("src/main/resources/superBird1.png").getImage, 50,50)),
+    2 -> new ImageIcon(scaleImage(new ImageIcon("src/main/resources/superBird2.png").getImage, 50,50))
+  )
+
+  var birdImagesMap:Map[Int, ImageIcon] =  birdImages
+
+  var imageIcon:ImageIcon = birdImages(1)
 
   def changeFrame(): Unit = {
     if (frame == 2) frame = 1
     else frame += 1
-    imageIcon = images(frame)
+    imageIcon = birdImagesMap(frame)
   }
 
 
