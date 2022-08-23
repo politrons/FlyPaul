@@ -33,7 +33,7 @@ class BirdEngine(var xPos: Integer,
     setFrameDelay()
     startGravity()
     outOfLevelSchedule()
-    mapCollisionSchedule()
+    cloudSchedule()
     powerUpSchedule()
   }
 
@@ -48,6 +48,9 @@ class BirdEngine(var xPos: Integer,
     setLocation(bird.x, bird.y)
   }
 
+  /**
+   * Key Listener for bird mode
+   */
   private class KeyListener() extends KeyAdapter {
 
     override def keyPressed(e: KeyEvent): Unit = {
@@ -61,6 +64,9 @@ class BirdEngine(var xPos: Integer,
     }
   }
 
+  /**
+   * Key Listener for super bird mode
+   */
   private class SuperBootsKeyListener() extends KeyAdapter {
 
     override def keyPressed(e: KeyEvent): Unit = {
@@ -77,6 +83,9 @@ class BirdEngine(var xPos: Integer,
     }
   }
 
+  /**
+   * Task with the governance of apply gravity in the bird.
+   */
   def startGravity(): Unit = {
     Future {
       while (true) {
@@ -98,13 +107,17 @@ class BirdEngine(var xPos: Integer,
       while (true) {
         Thread.sleep(10)
         if (bird.y <= -50 || bird.y >= 600) {
-          processDeadBird()
+          setDeadBirdMode()
         }
       }
     }
   }
 
-  private def mapCollisionSchedule() = {
+  /**
+   * Schedule tp detect if the bird collision with any cloud.
+   * In case of collision, we set the bord in [setDeadBirdMode]
+   */
+  private def cloudSchedule() = {
     Future {
       val deviation = 20
       while (true) {
@@ -113,13 +126,17 @@ class BirdEngine(var xPos: Integer,
           val xComp = Math.abs(bird.x - (cloudEngine.cloud.x + 100))
           val yComp = Math.abs(bird.y - (cloudEngine.cloud.y + 50))
           if (xComp <= deviation && yComp <= deviation) {
-            processDeadBird()
+            setDeadBirdMode()
           }
         })
       }
     }
   }
 
+  /**
+   * Schedule tp detect if the bird collision with the super boot potion.
+   * In case of collision, we set the bord in [setSuperBirdMode] for 30 seconds
+   */
    private def powerUpSchedule(): Future[Unit] = {
     Future {
       val deviation = 20
@@ -129,19 +146,27 @@ class BirdEngine(var xPos: Integer,
         println("xComp " + xComp + " yComp " + yComp)
         if (xComp <= deviation && yComp <= deviation) {
           println("Power Up loaded")
-          bird.birdImagesMap = bird.superBirdImages
-          removeKeyListener(regularKeyListener)
-          addKeyListener(superBootsKeyListener)
+          setSuperBirdMode()
           Thread.sleep(30000)
-          bird.birdImagesMap = bird.birdImages
-          removeKeyListener(superBootsKeyListener)
-          addKeyListener(regularKeyListener)
+          setBirdMode()
         }
       }
     }
   }
 
-  private def processDeadBird(): Unit = {
+  private def setBirdMode(): Unit = {
+    bird.birdImagesMap = bird.birdImages
+    removeKeyListener(superBootsKeyListener)
+    addKeyListener(regularKeyListener)
+  }
+
+  private def setSuperBirdMode(): Unit = {
+    bird.birdImagesMap = bird.superBirdImages
+    removeKeyListener(regularKeyListener)
+    addKeyListener(superBootsKeyListener)
+  }
+
+  private def setDeadBirdMode(): Unit = {
     live -= 1
     hears(live).removeHeart()
     resetGame()

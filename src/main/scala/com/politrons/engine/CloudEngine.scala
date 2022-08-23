@@ -34,10 +34,13 @@ class CloudEngine(var xPos: Integer,
     timer.start()
   }
 
+  /**
+   * Task responsible to move the clouds from right to left with an incremental speed
+   * Every [incrementalTime] we increase cloud speed
+   */
   def startHorizon(): Unit = {
     val incrementalTime = 10000
     var time = System.currentTimeMillis() + incrementalTime
-
     Future {
       while (true) {
         if (time < System.currentTimeMillis()) {

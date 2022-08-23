@@ -6,6 +6,9 @@ import java.util.concurrent.Executors
 import javax.swing.JFrame
 import scala.concurrent.ExecutionContext
 
+/**
+ * Main [JFrame] level of the game where we append all Engines [JLabel]
+ */
 class Level extends JFrame {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))

@@ -6,7 +6,9 @@ import java.util.concurrent.Executors
 import javax.swing._
 import scala.concurrent.{ExecutionContext, Future}
 
-
+/**
+ * Engine responsible to show the life(heart) and remove it when the a life is lost.
+ */
 class HeartEngine(var xPos: Integer,
                   var yPos: Integer) extends JLabel {
 

@@ -6,6 +6,9 @@ import java.util.concurrent.Executors
 import javax.swing._
 import scala.concurrent.{ExecutionContext, Future}
 
+/**
+ * Engine responsible to show the goal sprite and move forward once the level ends.
+ */
 class GoalEngine(var xPos: Integer,
                  var yPos: Integer) extends JLabel {
 

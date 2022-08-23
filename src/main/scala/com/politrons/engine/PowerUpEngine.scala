@@ -7,6 +7,9 @@ import java.util.concurrent.Executors
 import javax.swing._
 import scala.concurrent.{ExecutionContext, Future}
 
+/**
+ * Engine responsible to show the powerUp sprite and move forward in the screen.
+ */
 class PowerUpEngine(var xPos: Integer,
                     var yPos: Integer) extends JLabel with ActionListener {
 
@@ -32,11 +35,10 @@ class PowerUpEngine(var xPos: Integer,
 
   /**
    * Every N time we run a random tp see if we can offer the powerUp icon.
-   * @param e
    */
   override def actionPerformed(e: ActionEvent): Unit = {
     val i = random.nextInt(100)
-    if (i < 99) {
+    if (i < 30) {
       setVisible(true)
       movePowerUp()
     }
@@ -44,11 +46,11 @@ class PowerUpEngine(var xPos: Integer,
 
   /**
    * Future to Show the power up and move forward in the screen.
-   * Once dureation ends this thread and task die.
+   * Once duration ends this thread and task die.
    */
   def movePowerUp(): Unit = {
-    powerUp.x = 750
-    powerUp.y = 100
+    powerUp.x = xPos
+    powerUp.y = yPos
     setLocation(powerUp.x, powerUp.y)
     Future {
       val duration = 10000
